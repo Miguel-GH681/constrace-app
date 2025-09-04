@@ -1,12 +1,12 @@
-import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:chat_app/helpers/icon_mapper.dart';
 import 'package:chat_app/models/block.dart';
+import 'package:chat_app/models/statistics.dart';
 import 'package:chat_app/services/project_service.dart';
 import 'package:chat_app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class BlockPage extends StatefulWidget {
   const BlockPage({super.key});
@@ -16,10 +16,9 @@ class BlockPage extends StatefulWidget {
 }
 
 class _BlockPageState extends State<BlockPage> {
-  RefreshController refreshController = RefreshController(initialRefresh: false);
   final projectService = ProjectService();
   List<Block> blocks = [];
-
+  Statistics statistics = Statistics(totalTasks: 1, finishedTasks: 0);
   final blockConfig = ProjectService.blockConfig;
 
   @override
@@ -30,6 +29,8 @@ class _BlockPageState extends State<BlockPage> {
 
   @override
   Widget build(BuildContext context) {
+    final measure = MediaQuery.of(context).size;
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (_, _){
@@ -47,7 +48,7 @@ class _BlockPageState extends State<BlockPage> {
             )
           ),
           elevation: 0,
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.frame,
           actions: [
             Container(
               margin: EdgeInsets.only(right: 15),
@@ -55,53 +56,107 @@ class _BlockPageState extends State<BlockPage> {
             )
           ],
         ),
-        body: SmartRefresher(
-          controller: refreshController,
-          enablePullDown: true,
-          header: WaterDropHeader(
-            complete: Icon(Icons.check_circle, color: AppColors.tertiary),
-            waterDropColor: AppColors.tertiary,
-          ),
-          onRefresh: (){
-            _loadProjects();
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 30,
-                mainAxisSpacing: 30,
-                childAspectRatio: 1
-              ),
-              itemCount: blocks.length,
-              itemBuilder: (context, i){
-                return GestureDetector(
-                  onTap: (){
-                    if(blockConfig['block_type_id'] == '1'){
-                      ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '2', 'parent_id': blocks[i].blockId.toString(), 'title': blocks[i].name };
-                      Navigator.pushNamed(context, 'block');
-                    } else{
-                      ProjectService.blockConfig = { 'block_id': blocks[i].blockId.toString() };
-                      Navigator.pushNamed(context, 'task');
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.white10,
-                        width: 2
-                      )
-                    ),
-                    child: blockConfig['block_type_id'] == '1'
-                      ? _iconColumn(blocks[i])
-                      : _graphColumn(blocks[i])
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 30),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white10,
+                      width: 2
+                    )
                   ),
-                );
-              }
-            )
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: measure.width * 0.22,
+                        child: CircularStepProgressIndicator(
+                          totalSteps: statistics.totalTasks,
+                          currentStep: statistics.finishedTasks,
+                          stepSize: 15,
+                          selectedColor: AppColors.tertiary,
+                          unselectedColor: AppColors.text10,
+                          padding: math.pi / 60,
+                          startingAngle: 0,
+                          arcSize: math.pi * 2,
+                        ),
+                      ),
+                      SizedBox(width: 30),
+                      SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tareas: ${statistics.totalTasks}',
+                              style: TextStyle(
+                                color: AppColors.text70,
+                                fontSize: 18
+                              ),
+                            ),
+                            Text(
+                              'Tareas finalizadas: ${statistics.finishedTasks}',
+                              style: TextStyle(
+                                  color: AppColors.text70,
+                                  fontSize: 18
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 30,
+                    childAspectRatio: 1
+                  ),
+                  itemCount: blocks.length,
+                  itemBuilder: (context, i){
+                    return GestureDetector(
+                      onTap: (){
+                        if(blockConfig['block_type_id'] == '1'){
+                          ProjectService.blockConfig = {
+                            'project_id': blockConfig['project_id'],
+                            'block_type_id': '2',
+                            'parent_id': blocks[i].blockId.toString(),
+                            'title': blocks[i].name
+                          };
+                          Navigator.pushNamed(context, 'block');
+                        } else{
+                          ProjectService.blockConfig = { 'block_id': blocks[i].blockId.toString() };
+                          Navigator.pushNamed(context, 'task');
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white10,
+                            width: 2
+                          )
+                        ),
+                        child: blockConfig['block_type_id'] == '1'
+                          ? _iconColumn(blocks[i])
+                          : _graphColumn(blocks[i])
+                      ),
+                    );
+                  }
+                ),
+              ),
+            ],
           )
         )
       ),
@@ -167,25 +222,38 @@ class _BlockPageState extends State<BlockPage> {
   }
 
   _loadProjects() async{
-    Map<String, dynamic> queryParams = {};
+    Map<String, dynamic> queryParamsBlock = {};
+    Map<String, dynamic> queryParamsStatistics = {};
+
     if(blockConfig['block_type_id'] == '1'){
-      queryParams = {
+      queryParamsBlock = {
         'project_id':blockConfig['project_id'],
         'block_type_id': blockConfig['block_type_id']
       };
+
+      queryParamsStatistics = {
+        'project_id':blockConfig['project_id'],
+        'statistics_type': 'project'
+      };
     } else{
-      queryParams = {
+      queryParamsBlock = {
         'project_id':blockConfig['project_id'],
         'block_type_id': blockConfig['block_type_id'],
         'parent_id': blockConfig['parent_id']
       };
+
+      queryParamsStatistics = {
+        'project_id':blockConfig['project_id'],
+        'statistics_type': 'block',
+        'block_id': blockConfig['parent_id']
+      };
     }
 
-    List<Block> res = await projectService.getBlocks(queryParams);
+    List<Block> res = await projectService.getBlocks(queryParamsBlock);
+    statistics = await projectService.getProjectStatistics(queryParamsStatistics);
     if(res.isNotEmpty){
       blocks = res;
       setState(() {  });
-      refreshController.refreshCompleted();
     }
   }
 }

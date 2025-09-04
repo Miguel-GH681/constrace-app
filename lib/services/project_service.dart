@@ -4,6 +4,8 @@ import 'package:chat_app/global/environment.dart';
 import 'package:chat_app/models/block.dart';
 import 'package:chat_app/models/block_response.dart';
 import 'package:chat_app/models/project_response.dart';
+import 'package:chat_app/models/project_statistics_response.dart';
+import 'package:chat_app/models/statistics.dart';
 import 'package:chat_app/models/task.dart';
 import 'package:chat_app/models/task_response.dart';
 import 'package:chat_app/services/auth_service.dart';
@@ -70,6 +72,24 @@ class ProjectService{
       return blocks;
     } else{
       return [];
+    }
+  }
+
+  Future<Statistics> getProjectStatistics(Map<String, dynamic> queryParams) async {
+    final uri = Uri.http(Environment.apiUrl, '/api/project/project-statistics', queryParams);
+    final res = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken()
+        }
+    );
+    if( res.statusCode == 200 ){
+      final loginResponse = projectStatisticsResponseFromJson(res.body);
+      Statistics statistics = loginResponse.msg;
+      return statistics;
+    } else{
+      return Statistics(totalTasks: 1, finishedTasks: 0);
     }
   }
 }

@@ -68,7 +68,7 @@ class _ProjectPageState extends State<ProjectPage> {
       physics: BouncingScrollPhysics(),
       itemBuilder: (_, i) => GestureDetector(
         onTap: (){
-          ProjectService.blockConfig = {'project_id':'3', 'block_type_id':'1', 'title': projects[i].projectName};
+          ProjectService.blockConfig = {'project_id': projects[i].projectId.toString(), 'block_type_id':'1', 'title': projects[i].projectName};
           Navigator.pushNamed(context, 'block');
         },
         child: Container(
