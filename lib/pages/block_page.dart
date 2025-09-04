@@ -5,6 +5,7 @@ import 'package:chat_app/models/block.dart';
 import 'package:chat_app/services/project_service.dart';
 import 'package:chat_app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class BlockPage extends StatefulWidget {
@@ -32,14 +33,14 @@ class _BlockPageState extends State<BlockPage> {
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (_, _){
-        log('ya salio');
+        ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '1' };
       },
       child: Scaffold(
         backgroundColor: AppColors.primary,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            'Bloques',
+            blockConfig['title'] ?? '',
             style: TextStyle(
               color: Colors.white,
               fontWeight:FontWeight.w500
@@ -78,10 +79,11 @@ class _BlockPageState extends State<BlockPage> {
                 return GestureDetector(
                   onTap: (){
                     if(blockConfig['block_type_id'] == '1'){
-                      ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '2', 'parent_id': blocks[i].blockId.toString() };
+                      ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '2', 'parent_id': blocks[i].blockId.toString(), 'title': blocks[i].name };
                       Navigator.pushNamed(context, 'block');
                     } else{
-                      // Navigator.pushNamed(context, 'block');
+                      ProjectService.blockConfig = { 'block_id': blocks[i].blockId.toString() };
+                      Navigator.pushNamed(context, 'task');
                     }
                   },
                   child: Container(
@@ -93,23 +95,9 @@ class _BlockPageState extends State<BlockPage> {
                         width: 2
                       )
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          IconMapper.getIcon(blocks[i].icon),
-                          size: 45, color: Colors.white70
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          blocks[i].name,
-                          style: TextStyle(
-                            color: AppColors.text70,
-                            fontSize: 15
-                          )
-                        )
-                      ],
-                    ),
+                    child: blockConfig['block_type_id'] == '1'
+                      ? _iconColumn(blocks[i])
+                      : _graphColumn(blocks[i])
                   ),
                 );
               }
@@ -117,6 +105,64 @@ class _BlockPageState extends State<BlockPage> {
           )
         )
       ),
+    );
+  }
+
+  Widget _iconColumn(Block block) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          IconMapper.getIcon(block.icon),
+          size: 45, color: Colors.white70
+        ),
+        SizedBox(height: 10),
+        Text(
+          block.name,
+          style: TextStyle(
+            color: AppColors.text70,
+            fontSize: 15
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _graphColumn(Block block) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 100,
+          width: 100,
+          // color: Colors.red,
+          child: CircularStepProgressIndicator(
+            totalSteps: block.totalTasks == 0 ? 1 : block.totalTasks,
+            currentStep: block.finishedTasks,
+            selectedColor: AppColors.tertiary,
+            unselectedColor: AppColors.text70,
+            padding: 0,
+            width: 10,
+            child: Icon(
+              IconMapper.getIcon(block.icon),
+              color: AppColors.tertiary,
+              size: 55,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          block.name,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: AppColors.text70
+          ),
+        )
+      ],
     );
   }
 

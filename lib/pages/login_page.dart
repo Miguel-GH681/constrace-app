@@ -88,7 +88,7 @@ class _FormState extends State<_Form> {
                 final loginStatus = await authService.login(emailController.text.trim(), passwordController.text.trim());
                 if(loginStatus){
                   socketService.connect();
-                  Navigator.pushReplacementNamed(context, 'block');
+                  Navigator.pushReplacementNamed(context, 'project');
                 } else{
                   showAlert(context, 'Credenciales incorrectas', 'Revise sus credenciales nuevamente.');
                 }

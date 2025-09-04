@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/task_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/pages/block_page.dart';
@@ -15,5 +16,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'register': ( _ ) => RegisterPage(),
   'loading': ( _ ) => LoadingPage(),
   'block': (_) => BlockPage(),
-  'project': (_) => ProjectPage()
+  'project': (_) => ProjectPage(),
+  'task': (_)=> TaskPage()
 };

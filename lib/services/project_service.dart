@@ -4,6 +4,8 @@ import 'package:chat_app/global/environment.dart';
 import 'package:chat_app/models/block.dart';
 import 'package:chat_app/models/block_response.dart';
 import 'package:chat_app/models/project_response.dart';
+import 'package:chat_app/models/task.dart';
+import 'package:chat_app/models/task_response.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,6 +47,26 @@ class ProjectService{
     if( res.statusCode == 200 ){
       final loginResponse = blockResponseFromJson(res.body);
       List<Block> blocks = loginResponse.msg;
+      return blocks;
+    } else{
+      return [];
+    }
+  }
+
+  Future<List<Task>> getTasks(String blockId) async {
+    final uri = Uri.http(Environment.apiUrl, '/api/project/task', {
+      'block_id': blockId
+    });
+    final res = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken()
+        }
+    );
+    if( res.statusCode == 200 ){
+      final loginResponse = taskResponseFromJson(res.body);
+      List<Task> blocks = loginResponse.msg;
       return blocks;
     } else{
       return [];

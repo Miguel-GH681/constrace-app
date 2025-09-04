@@ -25,6 +25,9 @@ class _ProjectPageState extends State<ProjectPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final mediaQuery = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -55,22 +58,22 @@ class _ProjectPageState extends State<ProjectPage> {
           waterDropColor: AppColors.tertiary,
         ),
         onRefresh: _loadProjects,
-        child: _projectListView()
+        child: _projectListView(mediaQuery)
       )
     );
   }
 
-  ListView _projectListView() {
+  ListView _projectListView(Size mediaQuery) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemBuilder: (_, i) => GestureDetector(
         onTap: (){
-          ProjectService.blockConfig = {'project_id':'3', 'block_type_id':'1'};
+          ProjectService.blockConfig = {'project_id':'3', 'block_type_id':'1', 'title': projects[i].projectName};
           Navigator.pushNamed(context, 'block');
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           height: 120,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -81,36 +84,55 @@ class _ProjectPageState extends State<ProjectPage> {
               width: 2
             )
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.circle_outlined, color: AppColors.tertiary, size: 40,),
-                  Text(
-                    projects[i].projectName,
-                    style: TextStyle(
-                      color: AppColors.text70,
-                      fontSize: 20
+              ClipRRect(
+                borderRadius: BorderRadiusGeometry.only(
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10)
+                ),
+                child: Image.network(
+                  'https://i.pinimg.com/564x/fe/29/8a/fe298a70a49d93f50c62ae40c5ecce3a.jpg',
+                ),
+              ),
+              SizedBox(width: 15),
+              SizedBox(
+                width: mediaQuery.width * 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          projects[i].projectName,
+                          style: TextStyle(
+                              color: AppColors.text70,
+                              fontSize: 19
+                          )
+                        ),
+                        Icon(Icons.circle, color: AppColors.tertiary, size: 20),
+                      ],
+                    ),
+                    Divider(
+                      height: 1,
+                      color: AppColors.text10,
+                    ),
+                    Text(
+                        '21/08/2025',
+                        style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16
+                        )
                     )
-                  )
-                ],
+                  ],
+                ),
               ),
-              Divider(
-                height: 1,
-                color: AppColors.text10,
-              ),
-              Text(
-                '21 de agosto del 2025',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 20
-                )
-              )
             ],
-          ),
+          )
         ),
       ),
       itemCount: projects.length,
