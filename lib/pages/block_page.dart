@@ -50,7 +50,7 @@ class _BlockPageState extends State<BlockPage> {
           ),
           elevation: 7,
           shadowColor: AppColors.darkBackgroundColor,
-          backgroundColor: AppColors.frame,
+          backgroundColor: AppColors.secondary,
           actions: [
             Container(
               margin: EdgeInsets.only(right: 15),
@@ -68,7 +68,7 @@ class _BlockPageState extends State<BlockPage> {
                 width: double.infinity,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Colors.white10,
@@ -151,7 +151,7 @@ class _BlockPageState extends State<BlockPage> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.primary,
+                          color: AppColors.secondary,
                           borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                             BoxShadow(
@@ -175,7 +175,7 @@ class _BlockPageState extends State<BlockPage> {
         ),
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: AppColors.backgroundColor,
-          color: AppColors.frame,
+          color: AppColors.secondary,
           animationDuration: Duration(milliseconds: 200),
           items: [
             Icon(Icons.message_sharp, color: AppColors.tertiary),

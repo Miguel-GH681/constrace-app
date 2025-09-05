@@ -41,7 +41,7 @@ class _ProjectPageState extends State<ProjectPage> {
         ),
         elevation: 7,
         shadowColor: AppColors.darkBackgroundColor,
-        backgroundColor: AppColors.frame,
+        backgroundColor: AppColors.secondary,
         actions: [
           Container(
             margin: EdgeInsets.only(right: 15),
@@ -52,7 +52,7 @@ class _ProjectPageState extends State<ProjectPage> {
       body: _projectListView(mediaQuery),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: AppColors.backgroundColor,
-        color: AppColors.frame,
+        color: AppColors.secondary,
         animationDuration: Duration(milliseconds: 300),
         items: [
           Icon(Icons.message_sharp, color: AppColors.tertiary),
@@ -78,7 +78,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
                 ),
-                color: AppColors.primary,
+                color: AppColors.secondary,
                 elevation: 7,
                 shadowColor: AppColors.darkBackgroundColor,
                 child: SizedBox(

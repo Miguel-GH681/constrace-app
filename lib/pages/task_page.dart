@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chat_app/helpers/state_mapper.dart';
 import 'package:chat_app/models/task.dart';
 import 'package:chat_app/services/project_service.dart';
@@ -30,7 +31,7 @@ class _TaskPageState extends State<TaskPage> {
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
@@ -40,8 +41,9 @@ class _TaskPageState extends State<TaskPage> {
             fontWeight:FontWeight.w500
           )
         ),
-        elevation: 0,
-        backgroundColor: AppColors.frame,
+        elevation: 7,
+        shadowColor: AppColors.darkBackgroundColor,
+        backgroundColor: AppColors.secondary,
         actions: [
           Container(
             margin: EdgeInsets.only(right: 15),
@@ -49,88 +51,171 @@ class _TaskPageState extends State<TaskPage> {
           )
         ],
       ),
-      body: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (_, i) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          height: 120,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  color: Colors.white10,
-                  width: 2
-              )
+      body: Column(
+        children: [
+          SizedBox(
+            height: 220,
+            child: CarouselSlider(
+              items: [
+                _personCard(mediaQuery)
+              ],
+              options: CarouselOptions(
+                enlargeCenterPage: true,
+                enableInfiniteScroll: true,
+                viewportFraction: 1,
+                padEnds: true
+              ),
+            ),
           ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.only(
-                    bottomRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)
-                ),
-                child: Image.network(
-                  'https://adstudioshahalam.com/wp-content/uploads/2022/07/corporate-profile-headshot-business-photo-studio-1.jpg',
-                ),
-              ),
-              SizedBox(width: 15),
-              SizedBox(
-                width: mediaQuery.width * 0.64,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          tasks[i].title,
-                          style: TextStyle(
-                            color: AppColors.text70,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500
-                          )
-                        ),
-                        Icon(
-                          Icons.circle,
-                          color: StateMapper.getColor(tasks[i].status),
-                          size: 22
-                        ),
-                      ],
-                    ),
-                    // Divider(
-                    //   height: 1,
-                    //   color: AppColors.text10,
-                    // ),
-                    Text(
-                      tasks[i].description,
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                      textAlign: TextAlign.start,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          )
-        ),
-        itemCount: tasks.length,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            height: 400,
+            child: _taskList(mediaQuery),
+          ),
+        ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: AppColors.primary,
-        color: AppColors.frame,
+        backgroundColor: AppColors.backgroundColor,
+        color: AppColors.secondary,
         animationDuration: Duration(milliseconds: 200),
         items: [
           Icon(Icons.message_sharp, color: AppColors.tertiary),
           Icon(Icons.work_sharp, color: AppColors.tertiary)
         ],
       )
+    );
+  }
+
+  Widget _taskList(Size mediaQuery) {
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (_, i) => Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        height: 110,
+        decoration: BoxDecoration(
+          color: AppColors.secondary,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.white10,
+            width: 2
+          )
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: mediaQuery.width * 0.73,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        tasks[i].title,
+                        style: TextStyle(
+                          color: AppColors.text70,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500
+                        )
+                      ),
+                      Icon(
+                        Icons.circle,
+                        color: StateMapper.getColor(tasks[i].status),
+                        size: 22
+                      ),
+                    ],
+                  ),
+                  Text(
+                    tasks[i].description,
+                    style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    ),
+                    textAlign: TextAlign.start,
+                  )
+                ],
+              ),
+            ),
+          ],
+        )
+      ),
+      itemCount: tasks.length,
+    );
+  }
+
+  Widget _personCard(Size mediaQuery) {
+    return Stack(
+      children: [
+        Positioned(
+          top: 25,
+          left: 15,
+          child: Container(
+            height: 180,
+            width: mediaQuery.width * 0.9,
+            decoration: BoxDecoration(
+              color: AppColors.backgroundColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 6,
+                  offset: Offset(2,4)
+                )
+              ]
+            ),
+          )
+        ),
+        Positioned(
+          top: 5,
+          left: 25,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: Container(
+              height: 170,
+              width: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColors.secondary,
+                image: DecorationImage(
+                    image: AssetImage('assets/house-icon.png'),
+                  fit: BoxFit.fill
+                )
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 45,
+          left: 160,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Encargado',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppColors.secondary,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              Text(
+                'Alberto Perez',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.text10,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              Text('albertop@gmail.com')
+            ],
+          ),
+        )
+      ],
     );
   }
 
