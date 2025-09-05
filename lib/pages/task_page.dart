@@ -1,6 +1,8 @@
+import 'package:chat_app/helpers/state_mapper.dart';
 import 'package:chat_app/models/task.dart';
 import 'package:chat_app/services/project_service.dart';
 import 'package:chat_app/theme/app_colors.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -24,6 +26,9 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final mediaQuery = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -36,7 +41,7 @@ class _TaskPageState extends State<TaskPage> {
           )
         ),
         elevation: 0,
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.frame,
         actions: [
           Container(
             margin: EdgeInsets.only(right: 15),
@@ -48,7 +53,7 @@ class _TaskPageState extends State<TaskPage> {
         physics: BouncingScrollPhysics(),
         itemBuilder: (_, i) => Container(
           margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           height: 120,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -59,38 +64,72 @@ class _TaskPageState extends State<TaskPage> {
                   width: 2
               )
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.circle_outlined, color: AppColors.tertiary, size: 40,),
-                  Text(
-                    tasks[i].title,
-                    style: TextStyle(
-                      color: AppColors.text70,
-                      fontSize: 20
+              ClipRRect(
+                borderRadius: BorderRadiusGeometry.only(
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)
+                ),
+                child: Image.network(
+                  'https://adstudioshahalam.com/wp-content/uploads/2022/07/corporate-profile-headshot-business-photo-studio-1.jpg',
+                ),
+              ),
+              SizedBox(width: 15),
+              SizedBox(
+                width: mediaQuery.width * 0.64,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          tasks[i].title,
+                          style: TextStyle(
+                            color: AppColors.text70,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500
+                          )
+                        ),
+                        Icon(
+                          Icons.circle,
+                          color: StateMapper.getColor(tasks[i].status),
+                          size: 22
+                        ),
+                      ],
+                    ),
+                    // Divider(
+                    //   height: 1,
+                    //   color: AppColors.text10,
+                    // ),
+                    Text(
+                      tasks[i].description,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.start,
                     )
-                  )
-                ],
+                  ],
+                ),
               ),
-              Divider(
-                height: 1,
-                color: AppColors.text10,
-              ),
-              Text(
-                '21 de agosto del 2025',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 20
-                )
-              )
             ],
-          ),
+          )
         ),
         itemCount: tasks.length,
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: AppColors.primary,
+        color: AppColors.frame,
+        animationDuration: Duration(milliseconds: 200),
+        items: [
+          Icon(Icons.message_sharp, color: AppColors.tertiary),
+          Icon(Icons.work_sharp, color: AppColors.tertiary)
+        ],
       )
     );
   }

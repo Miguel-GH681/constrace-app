@@ -5,6 +5,7 @@ import 'package:chat_app/models/block.dart';
 import 'package:chat_app/models/statistics.dart';
 import 'package:chat_app/services/project_service.dart';
 import 'package:chat_app/theme/app_colors.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -158,6 +159,15 @@ class _BlockPageState extends State<BlockPage> {
               ),
             ],
           )
+        ),
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: AppColors.primary,
+          color: AppColors.frame,
+          animationDuration: Duration(milliseconds: 200),
+          items: [
+            Icon(Icons.message_sharp, color: AppColors.tertiary),
+            Icon(Icons.work_sharp, color: AppColors.tertiary)
+          ],
         )
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _ProjectPageState extends State<ProjectPage> {
           )
         ),
         elevation: 0,
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.frame,
         actions: [
           Container(
             margin: EdgeInsets.only(right: 15),
@@ -59,6 +60,15 @@ class _ProjectPageState extends State<ProjectPage> {
         ),
         onRefresh: _loadProjects,
         child: _projectListView(mediaQuery)
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: AppColors.primary,
+        color: AppColors.frame,
+        animationDuration: Duration(milliseconds: 200),
+        items: [
+          Icon(Icons.message_sharp, color: AppColors.tertiary),
+          Icon(Icons.work_sharp, color: AppColors.tertiary)
+        ],
       )
     );
   }
