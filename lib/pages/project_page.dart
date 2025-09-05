@@ -30,7 +30,7 @@ class _ProjectPageState extends State<ProjectPage> {
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Proyectos',
@@ -39,7 +39,8 @@ class _ProjectPageState extends State<ProjectPage> {
             fontWeight:FontWeight.w500
           )
         ),
-        elevation: 0,
+        elevation: 7,
+        shadowColor: AppColors.darkBackgroundColor,
         backgroundColor: AppColors.frame,
         actions: [
           Container(
@@ -48,23 +49,11 @@ class _ProjectPageState extends State<ProjectPage> {
           )
         ],
       ),
-      body: SmartRefresher(
-        controller: refreshController,
-        enablePullDown: true,
-        header: WaterDropHeader(
-          complete: Icon(
-            Icons.check_circle,
-            color: AppColors.tertiary
-          ),
-          waterDropColor: AppColors.tertiary,
-        ),
-        onRefresh: _loadProjects,
-        child: _projectListView(mediaQuery)
-      ),
+      body: _projectListView(mediaQuery),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.backgroundColor,
         color: AppColors.frame,
-        animationDuration: Duration(milliseconds: 200),
+        animationDuration: Duration(milliseconds: 300),
         items: [
           Icon(Icons.message_sharp, color: AppColors.tertiary),
           Icon(Icons.work_sharp, color: AppColors.tertiary)
@@ -73,79 +62,75 @@ class _ProjectPageState extends State<ProjectPage> {
     );
   }
 
-  ListView _projectListView(Size mediaQuery) {
-    return ListView.builder(
-      physics: BouncingScrollPhysics(),
-      itemBuilder: (_, i) => GestureDetector(
-        onTap: (){
-          ProjectService.blockConfig = {'project_id': projects[i].projectId.toString(), 'block_type_id':'1', 'title': projects[i].projectName};
-          Navigator.pushNamed(context, 'block');
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          height: 120,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.secondary,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: Colors.white10,
-              width: 2
-            )
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.only(
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10)
+  Widget _projectListView(Size mediaQuery) {
+    return Container(
+      height: mediaQuery.height * 0.65,
+      margin: EdgeInsets.only(top: 60, left: 45, right: 45),
+      child: ListWheelScrollView(
+        itemExtent: mediaQuery.height * 0.5,
+        diameterRatio: 3.0,
+        children: projects.map((project)=> Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
                 ),
-                child: Image.network(
-                  'https://i.pinimg.com/564x/fe/29/8a/fe298a70a49d93f50c62ae40c5ecce3a.jpg',
-                ),
-              ),
-              SizedBox(width: 15),
-              SizedBox(
-                width: mediaQuery.width * 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          projects[i].projectName,
-                          style: TextStyle(
-                              color: AppColors.text70,
-                              fontSize: 19
-                          )
-                        ),
-                        Icon(Icons.circle, color: AppColors.tertiary, size: 20),
-                      ],
-                    ),
-                    Divider(
-                      height: 1,
-                      color: AppColors.text10,
-                    ),
-                    Text(
-                        '21/08/2025',
+                color: AppColors.primary,
+                elevation: 7,
+                shadowColor: AppColors.darkBackgroundColor,
+                child: SizedBox(
+                  height: mediaQuery.height * 0.40,
+                  width: mediaQuery.width,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 150),
+                      Text(
+                        project.projectName,
                         style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 16
-                        )
-                    )
-                  ],
+                          color: AppColors.primaryText,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      Text(
+                        project.projectOwner,
+                        style: TextStyle(
+                            color: AppColors.text70,
+                            fontSize: 20,
+                        ),
+                      ),
+                      Text(
+                        project.finalDate.toString(),
+                        style: TextStyle(
+                            color: AppColors.text70,
+                            fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          )
-        ),
+            ),
+            Positioned(
+              top: -40,
+              child: SizedBox(
+                height: 200,
+                child: GestureDetector(
+                  onTap: (){
+                    ProjectService.blockConfig = {'project_id': project.projectId.toString(), 'block_type_id':'1', 'title': project.projectName};
+                    Navigator.pushNamed(context, 'block');
+                  },
+                  child: Image.asset('assets/house-icon.png', ),
+                ),
+              ),
+            )
+          ]
+        )).toList()
       ),
-      itemCount: projects.length,
     );
   }
 

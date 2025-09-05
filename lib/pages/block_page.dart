@@ -38,7 +38,7 @@ class _BlockPageState extends State<BlockPage> {
         ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '1' };
       },
       child: Scaffold(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
@@ -48,7 +48,8 @@ class _BlockPageState extends State<BlockPage> {
               fontWeight:FontWeight.w500
             )
           ),
-          elevation: 0,
+          elevation: 7,
+          shadowColor: AppColors.darkBackgroundColor,
           backgroundColor: AppColors.frame,
           actions: [
             Container(
@@ -67,12 +68,20 @@ class _BlockPageState extends State<BlockPage> {
                 width: double.infinity,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Colors.white10,
                       width: 2
-                    )
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 6,
+                        offset: Offset(2,4)
+                      )
+                    ]
                   ),
                   child: Row(
                     children: [
@@ -83,7 +92,7 @@ class _BlockPageState extends State<BlockPage> {
                           currentStep: statistics.finishedTasks,
                           stepSize: 15,
                           selectedColor: AppColors.tertiary,
-                          unselectedColor: AppColors.text10,
+                          unselectedColor: AppColors.backgroundColor,
                           padding: math.pi / 60,
                           startingAngle: 0,
                           arcSize: math.pi * 2,
@@ -98,14 +107,14 @@ class _BlockPageState extends State<BlockPage> {
                             Text(
                               'Tareas: ${statistics.totalTasks}',
                               style: TextStyle(
-                                color: AppColors.text70,
+                                color: AppColors.backgroundColor,
                                 fontSize: 18
                               ),
                             ),
                             Text(
                               'Tareas finalizadas: ${statistics.finishedTasks}',
                               style: TextStyle(
-                                  color: AppColors.text70,
+                                  color: AppColors.backgroundColor,
                                   fontSize: 18
                               ),
                             )
@@ -142,12 +151,16 @@ class _BlockPageState extends State<BlockPage> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.secondary,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white10,
-                            width: 2
-                          )
+                            boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 6,
+                                offset: Offset(2,4)
+                            )
+                          ]
                         ),
                         child: blockConfig['block_type_id'] == '1'
                           ? _iconColumn(blocks[i])
@@ -161,7 +174,7 @@ class _BlockPageState extends State<BlockPage> {
           )
         ),
         bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.backgroundColor,
           color: AppColors.frame,
           animationDuration: Duration(milliseconds: 200),
           items: [
@@ -179,13 +192,13 @@ class _BlockPageState extends State<BlockPage> {
       children: [
         Icon(
           IconMapper.getIcon(block.icon),
-          size: 45, color: Colors.white70
+          size: 45, color: AppColors.backgroundColor
         ),
         SizedBox(height: 10),
         Text(
           block.name,
           style: TextStyle(
-            color: AppColors.text70,
+            color: AppColors.backgroundColor,
             fontSize: 15
           )
         )
@@ -207,8 +220,8 @@ class _BlockPageState extends State<BlockPage> {
             totalSteps: block.totalTasks == 0 ? 1 : block.totalTasks,
             currentStep: block.finishedTasks,
             selectedColor: AppColors.tertiary,
-            unselectedColor: AppColors.text70,
-            padding: 0,
+            unselectedColor: AppColors.backgroundColor,
+            padding: math.pi / 60,
             width: 10,
             child: Icon(
               IconMapper.getIcon(block.icon),

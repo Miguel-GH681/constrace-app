@@ -8,8 +8,10 @@ class AppColors{
   static const Color success = Color(0xFF1AB61A);
   static const Color warning = Color(0xFFB6B61A);
   static const Color frame = Color(0XFF121216);
+  static const Color backgroundColor = Color(0XFFededed);
+  static const Color darkBackgroundColor = Colors.black;
   static const Color primaryText = Colors.white;
-
   static const Color text70 = Colors.white70;
+  static const Color text54 = Colors.white54;
   static const Color text10 = Colors.white10;
 }

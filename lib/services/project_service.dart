@@ -18,7 +18,7 @@ class ProjectService{
   static Map<String, dynamic> blockConfig = {};
 
   Future<List<Project>> getProjects() async {
-    final uri = Uri.http(Environment.apiUrl, '/api/project/project', {
+    final uri = Uri.https(Environment.apiUrl, '/api/project/project', {
       'user_id': '2'
     });
     final res = await http.get(
@@ -38,7 +38,7 @@ class ProjectService{
   }
 
   Future<List<Block>> getBlocks(Map<String, dynamic> queryParams) async {
-    final uri = Uri.http(Environment.apiUrl, '/api/project/block', queryParams);
+    final uri = Uri.https(Environment.apiUrl, '/api/project/block', queryParams);
     final res = await http.get(
         uri,
         headers: {
@@ -56,7 +56,7 @@ class ProjectService{
   }
 
   Future<List<Task>> getTasks(String blockId) async {
-    final uri = Uri.http(Environment.apiUrl, '/api/project/task', {
+    final uri = Uri.https(Environment.apiUrl, '/api/project/task', {
       'block_id': blockId
     });
     final res = await http.get(
@@ -76,7 +76,7 @@ class ProjectService{
   }
 
   Future<Statistics> getProjectStatistics(Map<String, dynamic> queryParams) async {
-    final uri = Uri.http(Environment.apiUrl, '/api/project/project-statistics', queryParams);
+    final uri = Uri.https(Environment.apiUrl, '/api/project/project-statistics', queryParams);
     final res = await http.get(
         uri,
         headers: {
