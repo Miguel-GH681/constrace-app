@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chat_app/widgets/card_custom_painter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:flutter/material.dart';
@@ -64,72 +66,100 @@ class _ProjectPageState extends State<ProjectPage> {
 
   Widget _projectListView(Size mediaQuery) {
     return Container(
-      height: mediaQuery.height * 0.65,
-      margin: EdgeInsets.only(top: 60, left: 45, right: 45),
-      child: ListWheelScrollView(
-        itemExtent: mediaQuery.height * 0.5,
-        diameterRatio: 3.0,
-        children: projects.map((project)=> Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 50),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
+      height: mediaQuery.height * 0.7,
+      margin: EdgeInsets.only(top: 40),
+      child: CarouselSlider(
+        items: projects.map((project){
+          return GestureDetector(
+            onTap: (){
+              ProjectService.blockConfig = {'project_id': project.projectId.toString(), 'block_type_id':'1', 'title': project.projectName};
+              Navigator.pushNamed(context, 'block');
+            },
+            child: _carouselItem(mediaQuery, project)
+          );
+        }).toList(),
+        options: CarouselOptions(
+          enlargeCenterPage: true,
+          enableInfiniteScroll: true,
+          viewportFraction: 0.9,
+          height: mediaQuery.height * 0.6,
+          padEnds: true
+        ),
+      )
+    );
+  }
+
+  Container _carouselItem(Size mediaQuery, Project project) {
+    return Container(
+      height: mediaQuery.height,
+      width: mediaQuery.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColors.backgroundColor,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 6,
+              offset: Offset(2,4)
+          )
+        ]
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CustomPaint(
+          size: Size(mediaQuery.width, mediaQuery.height),
+          painter: CardCustomPainter(),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: 80,
+                child: Icon(
+                  Icons.construction_sharp,
+                  color: AppColors.tertiary,
+                  size: 90,
                 ),
-                color: AppColors.secondary,
-                elevation: 7,
-                shadowColor: AppColors.darkBackgroundColor,
-                child: SizedBox(
-                  height: mediaQuery.height * 0.40,
+              ),
+              Positioned(
+                top: 300,
+                child: Container(
                   width: mediaQuery.width,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 150),
                       Text(
                         project.projectName,
                         style: TextStyle(
-                          color: AppColors.text100,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold
+                            color: AppColors.secondary,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 50,),
                       Text(
                         project.projectOwner,
                         style: TextStyle(
-                            color: AppColors.text70,
-                            fontSize: 20,
+                            color: AppColors.secondary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                       Text(
-                        project.finalDate.toString(),
+                        'Lunes 30 de septiembre del 2025',
                         style: TextStyle(
-                            color: AppColors.text70,
-                            fontSize: 18,
+                            color: AppColors.secondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
                         ),
-                      ),
+                      )
                     ],
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: -40,
-              child: SizedBox(
-                height: 200,
-                child: GestureDetector(
-                  onTap: (){
-                    ProjectService.blockConfig = {'project_id': project.projectId.toString(), 'block_type_id':'1', 'title': project.projectName};
-                    Navigator.pushNamed(context, 'block');
-                  },
-                  child: Image.asset('assets/house-icon.png', ),
-                ),
-              ),
-            )
-          ]
-        )).toList()
+                )
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
