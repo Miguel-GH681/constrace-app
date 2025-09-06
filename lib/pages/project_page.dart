@@ -35,7 +35,7 @@ class _ProjectPageState extends State<ProjectPage> {
         title: Text(
           'Proyectos',
           style: TextStyle(
-            color: AppColors.primaryText,
+            color: AppColors.text100,
             fontWeight:FontWeight.w500
           )
         ),
@@ -90,7 +90,7 @@ class _ProjectPageState extends State<ProjectPage> {
                       Text(
                         project.projectName,
                         style: TextStyle(
-                          color: AppColors.primaryText,
+                          color: AppColors.text100,
                           fontSize: 24,
                           fontWeight: FontWeight.bold
                         ),

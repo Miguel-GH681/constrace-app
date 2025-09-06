@@ -68,7 +68,7 @@ class _BlockPageState extends State<BlockPage> {
                 width: double.infinity,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Colors.white10,
@@ -76,7 +76,7 @@ class _BlockPageState extends State<BlockPage> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.1),
                         spreadRadius: 2,
                         blurRadius: 6,
                         offset: Offset(2,4)
@@ -92,7 +92,7 @@ class _BlockPageState extends State<BlockPage> {
                           currentStep: statistics.finishedTasks,
                           stepSize: 15,
                           selectedColor: AppColors.tertiary,
-                          unselectedColor: AppColors.backgroundColor,
+                          unselectedColor: AppColors.primary,
                           padding: math.pi / 60,
                           startingAngle: 0,
                           arcSize: math.pi * 2,
@@ -107,15 +107,17 @@ class _BlockPageState extends State<BlockPage> {
                             Text(
                               'Tareas: ${statistics.totalTasks}',
                               style: TextStyle(
-                                color: AppColors.backgroundColor,
-                                fontSize: 18
+                                color: AppColors.secondary,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
                               ),
                             ),
                             Text(
                               'Tareas finalizadas: ${statistics.finishedTasks}',
                               style: TextStyle(
-                                  color: AppColors.backgroundColor,
-                                  fontSize: 18
+                                color: AppColors.secondary,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
                               ),
                             )
                           ],
@@ -151,11 +153,11 @@ class _BlockPageState extends State<BlockPage> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.secondary,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 6,
                                 offset: Offset(2,4)
@@ -192,14 +194,15 @@ class _BlockPageState extends State<BlockPage> {
       children: [
         Icon(
           IconMapper.getIcon(block.icon),
-          size: 45, color: AppColors.backgroundColor
+          size: 45, color: AppColors.secondary
         ),
         SizedBox(height: 10),
         Text(
           block.name,
           style: TextStyle(
-            color: AppColors.backgroundColor,
-            fontSize: 15
+            color: AppColors.secondary,
+            fontSize: 15,
+            fontWeight: FontWeight.bold
           )
         )
       ],
@@ -210,7 +213,7 @@ class _BlockPageState extends State<BlockPage> {
     return Column(
       children: [
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         SizedBox(
           height: 100,
@@ -220,24 +223,28 @@ class _BlockPageState extends State<BlockPage> {
             totalSteps: block.totalTasks == 0 ? 1 : block.totalTasks,
             currentStep: block.finishedTasks,
             selectedColor: AppColors.tertiary,
-            unselectedColor: AppColors.backgroundColor,
+            unselectedColor: AppColors.primary,
             padding: math.pi / 60,
             width: 10,
             child: Icon(
               IconMapper.getIcon(block.icon),
-              color: AppColors.tertiary,
+              color: AppColors.secondary,
               size: 55,
             ),
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
-        Text(
-          block.name,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: AppColors.text70
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: Text(
+            block.name,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: AppColors.secondary,
+              fontWeight: FontWeight.bold
+            ),
           ),
         )
       ],

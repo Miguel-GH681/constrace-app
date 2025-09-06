@@ -90,55 +90,63 @@ class _TaskPageState extends State<TaskPage> {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemBuilder: (_, i) => Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         height: 110,
         decoration: BoxDecoration(
-          color: AppColors.secondary,
+          color: AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: Colors.white10,
             width: 2
-          )
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 6,
+                offset: Offset(2,4)
+            )
+          ]
         ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: mediaQuery.width * 0.73,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SizedBox(
+          width: mediaQuery.width * 0.8,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        tasks[i].title,
-                        style: TextStyle(
-                          color: AppColors.text70,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500
-                        )
-                      ),
-                      Icon(
-                        Icons.circle,
-                        color: StateMapper.getColor(tasks[i].status),
-                        size: 22
-                      ),
-                    ],
-                  ),
                   Text(
-                    tasks[i].description,
+                    tasks[i].title,
                     style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                    ),
-                    textAlign: TextAlign.start,
-                  )
+                      color: AppColors.secondary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500
+                    )
+                  ),
+                  Icon(
+                    Icons.circle,
+                    color: StateMapper.getColor(tasks[i].status),
+                    size: 22
+                  ),
                 ],
               ),
-            ),
-          ],
+              Divider(
+                height: 1,
+                color: AppColors.darkBackgroundColor,
+              ),
+              Text(
+                tasks[i].description,
+                style: TextStyle(
+                color: AppColors.darkBackgroundColor,
+                fontSize: 16,
+                ),
+                textAlign: TextAlign.start,
+              )
+            ],
+          ),
         )
       ),
       itemCount: tasks.length,
@@ -207,7 +215,7 @@ class _TaskPageState extends State<TaskPage> {
                 'Alberto Perez',
                 style: TextStyle(
                   fontSize: 16,
-                  color: AppColors.text10,
+                  color: AppColors.text70,
                   fontWeight: FontWeight.bold
                 ),
               ),
