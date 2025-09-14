@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class UserService{
   Future<List<User>> getUsers() async{
     try{
-      final uri = Uri.https(Environment.apiUrl, '/api/user');
+      final uri = Uri.http(Environment.apiUrl, '/api/user');
       final res = await http.get(
           uri,
           headers: {

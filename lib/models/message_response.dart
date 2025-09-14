@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final messageResponse = messageResponseFromJson(jsonString);
+
 import 'dart:convert';
 
 MessageResponse messageResponseFromJson(String str) => MessageResponse.fromJson(json.decode(str));
@@ -25,33 +29,33 @@ class MessageResponse {
 }
 
 class Msg {
-  String from;
-  String to;
+  int messageId;
+  int senderId;
+  int receiverId;
   String message;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime sendDate;
 
   Msg({
-    required this.from,
-    required this.to,
+    required this.messageId,
+    required this.senderId,
+    required this.receiverId,
     required this.message,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.sendDate,
   });
 
   factory Msg.fromJson(Map<String, dynamic> json) => Msg(
-    from: json["from"],
-    to: json["to"],
+    messageId: json["message_id"],
+    senderId: json["sender_id"],
+    receiverId: json["receiver_id"],
     message: json["message"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    sendDate: DateTime.parse(json["send_date"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "from": from,
-    "to": to,
+    "message_id": messageId,
+    "sender_id": senderId,
+    "receiver_id": receiverId,
     "message": message,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
+    "send_date": "${sendDate.year.toString().padLeft(4, '0')}-${sendDate.month.toString().padLeft(2, '0')}-${sendDate.day.toString().padLeft(2, '0')}",
   };
 }

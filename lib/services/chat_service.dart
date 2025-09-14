@@ -9,7 +9,7 @@ class ChatService with ChangeNotifier{
   late User usuarioTo;
 
   Future getChat( int userId ) async{
-    final uri = Uri.https(Environment.apiUrl, '/api/message/$userId');
+    final uri = Uri.http(Environment.apiUrl, '/api/message/$userId');
     final res = await http.get(
       uri,
       headers: {

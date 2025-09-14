@@ -1,8 +1,11 @@
 import 'package:chat_app/models/usuario.dart';
+import 'package:chat_app/pages/project_page.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/services/socket_service.dart';
 import 'package:chat_app/services/user_service.dart';
+import 'package:chat_app/theme/app_colors.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -31,12 +34,13 @@ class _UsersPageState extends State<UsersPage> {
     final authService = Provider.of<AuthService>(context, listen: false);
     final socketService = Provider.of<SocketService>(context, listen: false);
     return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        title: Text(authService.user.fullName),
+        title: Text(authService.user.fullName, style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        elevation: 1,
-        backgroundColor: Colors.white,
+        elevation: 7,
+        shadowColor: AppColors.darkBackgroundColor,
+        backgroundColor: AppColors.secondary,
         leading: IconButton(
           onPressed: (){
             socketService.disconnect();
@@ -46,13 +50,7 @@ class _UsersPageState extends State<UsersPage> {
           icon: Icon(Icons.exit_to_app)
         ),
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            // child: Icon(Icons.offline_bolt, color: Colors.red),
-            child: socketService.serverStatus == ServerStatus.Online
-            ? Icon(Icons.check_circle, color: Colors.blue[400])
-            : Icon(Icons.offline_bolt, color: Colors.red),
-          )
+          Icon(Icons.check_circle, color: AppColors.tertiary)
         ],
       ),
       body: SmartRefresher(
@@ -65,6 +63,25 @@ class _UsersPageState extends State<UsersPage> {
         onRefresh: _cargarUsuarios,
         child: _userListView(),
       ),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: AppColors.backgroundColor,
+        color: AppColors.secondary,
+        animationDuration: Duration(milliseconds: 300),
+        items: [
+          Icon(Icons.work_sharp, color: AppColors.tertiary),
+          Icon(Icons.message_sharp, color: AppColors.tertiary),
+        ],
+        onTap: (index){
+          final routeName = index == 0 ? 'project' : 'users';
+          Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                  pageBuilder: (_,__,___) => routeName == 'project' ? ProjectPage() : UsersPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero
+              )
+          );
+        },
+      )
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chat_app/pages/users_page.dart';
 import 'package:chat_app/widgets/card_custom_painter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -57,9 +58,19 @@ class _ProjectPageState extends State<ProjectPage> {
         color: AppColors.secondary,
         animationDuration: Duration(milliseconds: 300),
         items: [
+          Icon(Icons.work_sharp, color: AppColors.tertiary),
           Icon(Icons.message_sharp, color: AppColors.tertiary),
-          Icon(Icons.work_sharp, color: AppColors.tertiary)
         ],
+        onTap: (index){
+          final routeName = index == 0 ? 'project' : 'users';
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (_,__,___) => routeName == 'project' ? ProjectPage() : UsersPage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero
+            )
+          );
+        },
       )
     );
   }

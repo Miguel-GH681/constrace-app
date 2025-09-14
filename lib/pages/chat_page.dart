@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:chat_app/models/message_response.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/services/socket_service.dart';
@@ -43,7 +44,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     chat.forEach((message){
       messages.insert(0, ChatMessage(
           text: message.message,
-          uid: message.to,
+          uid: message.senderId,
           animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 0))..forward()
       ));
     });
@@ -191,9 +192,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     });
 
     socketService.socket.emit('mensaje-personal', {
-      'from': authService.user.userId,
-      'to': chatService.usuarioTo.userId,
-      'message': text
+      'sender_id': authService.user.userId,
+      'receiver_id': chatService.usuarioTo.userId,
+      'message': text,
+      'send_date': DateTime.now().toString()
     });
   }
 
