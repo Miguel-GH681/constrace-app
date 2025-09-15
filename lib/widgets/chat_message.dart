@@ -1,4 +1,5 @@
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,7 @@ class ChatMessage extends StatelessWidget {
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.only(bottom: 5, left: 50, right: 5),
         decoration: BoxDecoration(
-          color: Color(0xff4D9EF6),
+          color: AppColors.secondary,
           borderRadius: BorderRadius.circular(15)
         ),
         child: Text(
@@ -63,7 +64,7 @@ class ChatMessage extends StatelessWidget {
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.only(bottom: 5, left: 5, right: 50),
         decoration: BoxDecoration(
-            color: Color(0xffE4E5E8),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(15)
         ),
         child: Text(

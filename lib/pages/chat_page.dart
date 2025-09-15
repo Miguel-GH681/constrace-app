@@ -5,6 +5,7 @@ import 'package:chat_app/models/message_response.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/services/socket_service.dart';
+import 'package:chat_app/theme/app_colors.dart';
 import 'package:chat_app/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +53,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   void _listenMessage(dynamic payload){
-    log('payload $payload');
     ChatMessage message = ChatMessage(
         text: payload['message'],
-        uid: payload['from'],
+        uid: payload['sender_id'],
         animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 300))
     );
     messages.insert(0, message);
@@ -71,28 +71,27 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     final userTo = chatService.usuarioTo;
 
     return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: AppColors.text100
+        ),
         title: Column(
           children: [
             CircleAvatar(
               backgroundColor: Colors.blueAccent,
               maxRadius: 14,
-              child: Text(userTo.fullName.substring(0,2), style: TextStyle(fontSize: 12)),
+              child: Text(
+                  userTo.fullName.substring(0,2),
+                  style: TextStyle(fontSize: 12, color: AppColors.text100)
+              ),
             ),
             SizedBox(height: 3),
-            Text(
-                userTo.fullName,
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 12
-              ),
-            )
           ],
         ),
         elevation: 1,
         centerTitle: true,
-        backgroundColor: Colors.white
+        backgroundColor: AppColors.secondary
       ),
       body: Container(
         child: Column(
@@ -118,18 +117,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   Widget _inputChat(){
-    return SafeArea(
+    return SizedBox(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8),
+        color: AppColors.secondary,
+        padding: EdgeInsets.only(right: 0, left: 20, bottom: 10),
         child: Row(
           children: [
             Flexible(
               child: TextField(
+                cursorColor: AppColors.tertiary,
                 controller: textController,
                 onSubmitted: _handleSubmit,
                 onChanged: (String texto){
                   setState(() {
-                    if(texto.trim().length > 0){
+                    if(texto.trim().isNotEmpty){
                       isWriting = true;
                     } else{
                       isWriting = false;
@@ -137,9 +138,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                   });
                 },
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Enviar mensaje'
+                  hintText: 'Enviar mensaje',
+                  hintStyle: TextStyle(color: AppColors.text100)
                 ),
                 focusNode: focusNode,
+                style: TextStyle(
+                  color: AppColors.text100
+                ),
               ),
             ),
             Container(
@@ -156,7 +161,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                   child: IconButton(
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
-                    icon: Icon(Icons.send ),
+                    icon: Icon(Icons.send, color: AppColors.tertiary ),
                     onPressed: isWriting
                       ? ()=> _handleSubmit(textController.text.trim())
                       : null

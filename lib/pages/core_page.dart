@@ -1,3 +1,5 @@
+import 'package:chat_app/pages/project_page.dart';
+import 'package:chat_app/pages/users_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +43,16 @@ class CorePage extends StatelessWidget {
             Icon(Icons.message_sharp, color: AppColors.tertiary),
             Icon(Icons.work_sharp, color: AppColors.tertiary)
           ],
+          onTap: (index){
+            final routeName = index == 0 ? 'project' : 'users';
+            Navigator.of(context).pushReplacement(
+                PageRouteBuilder(
+                    pageBuilder: (_,__,___) => routeName == 'project' ? ProjectPage() : UsersPage(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero
+                )
+            );
+          },
         )
     );
   }

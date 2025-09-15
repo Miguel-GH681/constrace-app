@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:chat_app/pages/users_page.dart';
+import 'package:chat_app/pages/core_page.dart';
 import 'package:chat_app/widgets/card_custom_painter.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:flutter/material.dart';
 
@@ -32,46 +31,9 @@ class _ProjectPageState extends State<ProjectPage> {
 
     final mediaQuery = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        title: Text(
-          'Proyectos',
-          style: TextStyle(
-            color: AppColors.text100,
-            fontWeight:FontWeight.w500
-          )
-        ),
-        elevation: 7,
-        shadowColor: AppColors.darkBackgroundColor,
-        backgroundColor: AppColors.secondary,
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 15),
-            child: Icon(Icons.offline_bolt, color: AppColors.tertiary),
-          )
-        ],
-      ),
-      body: _projectListView(mediaQuery),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: AppColors.backgroundColor,
-        color: AppColors.secondary,
-        animationDuration: Duration(milliseconds: 300),
-        items: [
-          Icon(Icons.work_sharp, color: AppColors.tertiary),
-          Icon(Icons.message_sharp, color: AppColors.tertiary),
-        ],
-        onTap: (index){
-          final routeName = index == 0 ? 'project' : 'users';
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder(
-              pageBuilder: (_,__,___) => routeName == 'project' ? ProjectPage() : UsersPage(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero
-            )
-          );
-        },
-      )
+    return CorePage(
+      title: 'Proyectos',
+      child: _projectListView(mediaQuery)
     );
   }
 

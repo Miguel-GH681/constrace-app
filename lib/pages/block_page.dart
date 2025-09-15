@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:chat_app/helpers/icon_mapper.dart';
 import 'package:chat_app/models/block.dart';
 import 'package:chat_app/models/statistics.dart';
+import 'package:chat_app/pages/core_page.dart';
 import 'package:chat_app/services/project_service.dart';
 import 'package:chat_app/theme/app_colors.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -37,28 +37,9 @@ class _BlockPageState extends State<BlockPage> {
       onPopInvokedWithResult: (_, _){
         ProjectService.blockConfig = { 'project_id': blockConfig['project_id'], 'block_type_id': '1' };
       },
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            blockConfig['title'] ?? '',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight:FontWeight.w500
-            )
-          ),
-          elevation: 7,
-          shadowColor: AppColors.darkBackgroundColor,
-          backgroundColor: AppColors.secondary,
-          actions: [
-            Container(
-              margin: EdgeInsets.only(right: 15),
-              child: Icon(Icons.offline_bolt, color: AppColors.tertiary),
-            )
-          ],
-        ),
-        body: Padding(
+      child: CorePage(
+        title: blockConfig['title'] ?? '',
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
@@ -66,65 +47,65 @@ class _BlockPageState extends State<BlockPage> {
                 margin: EdgeInsets.symmetric(vertical: 30),
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 width: double.infinity,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.white10,
-                      width: 2
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 6,
-                        offset: Offset(2,4)
-                      )
-                    ]
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white10,
+                    width: 2
                   ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: measure.width * 0.22,
-                        child: CircularStepProgressIndicator(
-                          totalSteps: statistics.totalTasks,
-                          currentStep: statistics.finishedTasks,
-                          stepSize: 15,
-                          selectedColor: AppColors.tertiary,
-                          unselectedColor: AppColors.primary,
-                          padding: math.pi / 60,
-                          startingAngle: 0,
-                          arcSize: math.pi * 2,
-                        ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 6,
+                      offset: Offset(2,4)
+                    )
+                  ]
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: measure.width * 0.22,
+                      child: CircularStepProgressIndicator(
+                        totalSteps: statistics.totalTasks,
+                        currentStep: statistics.finishedTasks,
+                        stepSize: 15,
+                        selectedColor: AppColors.tertiary,
+                        unselectedColor: AppColors.primary,
+                        padding: math.pi / 60,
+                        startingAngle: 0,
+                        arcSize: math.pi * 2,
                       ),
-                      SizedBox(width: 30),
-                      SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Tareas: ${statistics.totalTasks}',
-                              style: TextStyle(
-                                color: AppColors.secondary,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                              ),
+                    ),
+                    SizedBox(width: 30),
+                    SizedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tareas: ${statistics.totalTasks}',
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
                             ),
-                            Text(
-                              'Tareas finalizadas: ${statistics.finishedTasks}',
-                              style: TextStyle(
-                                color: AppColors.secondary,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                          ),
+                          Text(
+                            'Tareas finalizadas: ${statistics.finishedTasks}',
+                            style: TextStyle(
+                              color: AppColors.secondary,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
               Expanded(
                 child: GridView.builder(
@@ -152,21 +133,21 @@ class _BlockPageState extends State<BlockPage> {
                         }
                       },
                       child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 2,
-                                blurRadius: 6,
-                                offset: Offset(2,4)
-                            )
-                          ]
-                        ),
-                        child: blockConfig['block_type_id'] == '1'
-                          ? _iconColumn(blocks[i])
-                          : _graphColumn(blocks[i])
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 6,
+                                    offset: Offset(2,4)
+                                )
+                              ]
+                          ),
+                          child: blockConfig['block_type_id'] == '1'
+                              ? _iconColumn(blocks[i])
+                              : _graphColumn(blocks[i])
                       ),
                     );
                   }
@@ -174,17 +155,8 @@ class _BlockPageState extends State<BlockPage> {
               ),
             ],
           )
-        ),
-        bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: AppColors.backgroundColor,
-          color: AppColors.secondary,
-          animationDuration: Duration(milliseconds: 200),
-          items: [
-            Icon(Icons.message_sharp, color: AppColors.tertiary),
-            Icon(Icons.work_sharp, color: AppColors.tertiary)
-          ],
         )
-      ),
+      )
     );
   }
 

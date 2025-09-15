@@ -1,11 +1,11 @@
 import 'package:chat_app/global/environment.dart';
+import 'package:chat_app/models/contact.dart';
 import 'package:chat_app/models/user_response.dart';
-import 'package:chat_app/models/usuario.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class UserService{
-  Future<List<User>> getUsers() async{
+  Future<List<Contact>> getUsers() async{
     try{
       final uri = Uri.http(Environment.apiUrl, '/api/user');
       final res = await http.get(

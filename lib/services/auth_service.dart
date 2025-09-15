@@ -29,7 +29,7 @@ class AuthService with ChangeNotifier{
         'Content-Type': 'application/json'
       }
     );
-    print('body: ${res.statusCode}');
+    print('body: ${res.body}');
 
     loading = false;
     if( res.statusCode == 200 ){
