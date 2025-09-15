@@ -6,6 +6,8 @@ import 'package:chat_app/models/block_response.dart';
 import 'package:chat_app/models/project_response.dart';
 import 'package:chat_app/models/project_statistics_response.dart';
 import 'package:chat_app/models/statistics.dart';
+import 'package:chat_app/models/status.dart';
+import 'package:chat_app/models/status_response.dart';
 import 'package:chat_app/models/task.dart';
 import 'package:chat_app/models/task_response.dart';
 import 'package:chat_app/services/auth_service.dart';
@@ -75,6 +77,24 @@ class ProjectService{
     }
   }
 
+  Future<List<Status>> getStatus() async {
+    final uri = Uri.http(Environment.apiUrl, '/api/task/status');
+    final res = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken()
+        }
+    );
+    if( res.statusCode == 200 ){
+      final statusResponse = statusResponseFromJson(res.body);
+      List<Status> status = statusResponse.msg;
+      return status;
+    } else{
+      return [];
+    }
+  }
+
   Future<Statistics> getProjectStatistics(Map<String, dynamic> queryParams) async {
     final uri = Uri.http(Environment.apiUrl, '/api/project/project-statistics', queryParams);
     final res = await http.get(
@@ -90,6 +110,23 @@ class ProjectService{
       return statistics;
     } else{
       return Statistics(totalTasks: 1, finishedTasks: 0);
+    }
+  }
+
+  Future<bool> updateTask(Map<String, dynamic> body) async {
+    final uri = Uri.http(Environment.apiUrl, '/api/task');
+    final res = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken()
+        },
+      body: body
+    );
+    if( res.statusCode == 200 ){
+      return true;
+    } else{
+      return false;
     }
   }
 }
