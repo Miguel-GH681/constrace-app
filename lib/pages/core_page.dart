@@ -40,8 +40,8 @@ class CorePage extends StatelessWidget {
           color: AppColors.secondary,
           animationDuration: Duration(milliseconds: 200),
           items: [
-            Icon(Icons.message_sharp, color: AppColors.tertiary),
-            Icon(Icons.work_sharp, color: AppColors.tertiary)
+            Icon(Icons.work_sharp, color: AppColors.backgroundColor),
+            Icon(Icons.message_sharp, color: AppColors.backgroundColor)
           ],
           onTap: (index){
             final routeName = index == 0 ? 'project' : 'users';

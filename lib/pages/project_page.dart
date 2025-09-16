@@ -80,22 +80,22 @@ class _ProjectPageState extends State<ProjectPage> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: CustomPaint(
-          size: Size(mediaQuery.width, mediaQuery.height),
-          painter: CardCustomPainter(),
-          child: Stack(
+        child: Stack(
             alignment: Alignment.center,
             children: [
               Positioned(
-                top: 80,
-                child: Icon(
-                  Icons.construction_sharp,
-                  color: AppColors.tertiary,
-                  size: 90,
+                top: 30,
+                child: Image(image: AssetImage('assets/flag.png')),
+              ),
+              Positioned(
+                bottom: 30,
+                child: Image.asset(
+                  'assets/flag.png',
+                  width: mediaQuery.width * 0.36,
                 ),
               ),
               Positioned(
-                top: 300,
+                top: 170,
                 child: Container(
                   width: mediaQuery.width,
                   child: Column(
@@ -105,16 +105,16 @@ class _ProjectPageState extends State<ProjectPage> {
                         project.projectName,
                         style: TextStyle(
                             color: AppColors.secondary,
-                            fontSize: 25,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      SizedBox(height: 50,),
+                      SizedBox(height: 90,),
                       Text(
                         project.projectOwner,
                         style: TextStyle(
                             color: AppColors.secondary,
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold
                         ),
                       ),
@@ -132,7 +132,7 @@ class _ProjectPageState extends State<ProjectPage> {
               )
             ],
           ),
-        ),
+
       ),
     );
   }
