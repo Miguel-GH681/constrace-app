@@ -64,10 +64,11 @@ class _UsersPageState extends State<UsersPage> {
           onTap: (){
             final chatService = Provider.of<ChatService>(context, listen: false);
             chatService.usuarioTo = User(userId: user.userId, fullName: user.fullName, phone: '', email: '', password: '', roleId: 0);
+            chatService.projectId = user.projectId;
             Navigator.pushNamed(context, 'chat');
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.backgroundColor,
               border: Border.all(
@@ -81,24 +82,32 @@ class _UsersPageState extends State<UsersPage> {
               children: [
                 Container(
                   height: 40,
-                  padding: EdgeInsets.all(10),
+                  width: 40,
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(10)
                   ),
-                  child: Text(
-                    user.fullName.substring(0, 2),
-                    style: TextStyle(
-                        color: AppColors.secondary
-                    )
+                  child: Center(
+                    child: Text(
+                      user.fullName.substring(0, 2),
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
                   ),
                 ),
                 SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.fullName),
-                    SizedBox(height: 10),
+                    Text(
+                      user.fullName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    SizedBox(height: 0),
                     Text(user.description),
                   ],
                 )

@@ -7,9 +7,10 @@ import 'package:http/http.dart' as http;
 
 class ChatService with ChangeNotifier{
   late User usuarioTo;
+  int projectId = 0;
 
-  Future getChat( int userId ) async{
-    final uri = Uri.http(Environment.apiUrl, '/api/message/$userId');
+  Future getChat( int userId, int projectId ) async{
+    final uri = Uri.http(Environment.apiUrl, '/api/message/$userId/$projectId');
     final res = await http.get(
       uri,
       headers: {

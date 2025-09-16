@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:chat_app/models/message_response.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/services/socket_service.dart';
@@ -37,11 +35,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     socketService = Provider.of<SocketService>(context, listen: false);
     authService = Provider.of<AuthService>(context, listen: false);
     socketService.socket.on('mensaje-personal', _listenMessage);
-    _loadHistory( chatService.usuarioTo.userId );
+    _loadHistory( chatService.usuarioTo.userId, chatService.projectId );
   }
 
-  void _loadHistory(int usuarioTo) async{
-    final chat = await chatService.getChat(usuarioTo);
+  void _loadHistory(int usuarioTo, int projectId) async{
+    final chat = await chatService.getChat(usuarioTo, projectId);
     chat.forEach((message){
       messages.insert(0, ChatMessage(
           text: message.message,
@@ -78,15 +76,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         ),
         title: Column(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.blueAccent,
-              maxRadius: 14,
-              child: Text(
-                  userTo.fullName.substring(0,2),
-                  style: TextStyle(fontSize: 12, color: AppColors.text100)
-              ),
-            ),
-            SizedBox(height: 3),
+            Text(
+              userTo.fullName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.bold
+              )
+            )
           ],
         ),
         elevation: 1,
@@ -195,10 +192,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     setState(() {
       isWriting = false;
     });
-
     socketService.socket.emit('mensaje-personal', {
       'sender_id': authService.user.userId,
       'receiver_id': chatService.usuarioTo.userId,
+      'project_id': chatService.projectId,
       'message': text,
       'send_date': DateTime.now().toString()
     });
