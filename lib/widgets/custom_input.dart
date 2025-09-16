@@ -38,6 +38,7 @@ class CustomInput extends StatelessWidget {
         keyboardType: textInputType,
         obscureText: isPassword,
         decoration: InputDecoration(
+          labelText: 'Horas trabajadas',
           prefixIcon: Icon(icon),
           focusedBorder: InputBorder.none,
           border: InputBorder.none,

@@ -23,7 +23,8 @@ class _TaskPageState extends State<TaskPage> {
   final projectService = ProjectService();
   List<Task> tasks = [];
   List<Status> status = [];
-  Status? initValue;
+  int initValue = 0;
+  TextEditingController taskEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -39,28 +40,34 @@ class _TaskPageState extends State<TaskPage> {
 
     return CorePage(
       title: 'Tareas',
-      child: Column(
-        children: [
-          SizedBox(
-            height: 220,
-            child: CarouselSlider(
-              items: [
-                CarouselItem()
-              ],
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                enableInfiniteScroll: true,
-                viewportFraction: 1,
-                padEnds: true
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Container(
+          height: 620,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 220,
+                child: CarouselSlider(
+                  items: [
+                    CarouselItem()
+                  ],
+                  options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    viewportFraction: 1,
+                    padEnds: true
+                  ),
+                ),
               ),
-            ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                height: 400,
+                child: _taskList(mediaQuery, context),
+              ),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            height: 400,
-            child: _taskList(mediaQuery, context),
-          ),
-        ],
+        ),
       )
     );
   }
@@ -90,14 +97,24 @@ class _TaskPageState extends State<TaskPage> {
         ),
         child: GestureDetector(
           onTap: (){
+            taskEditingController.text = tasks[i].hoursWorked.toString();
+            initValue = int.parse(tasks[i].status);
             showDialog(
               context: ctx,
               builder: (_) => StatefulBuilder(
                 builder: (context, setStateDialog) => AlertDialog(
                   backgroundColor: AppColors.backgroundColor,
-                  title: Text( 'Modificar Tareas'),
+                  title: Text(
+                    'Modificar Tarea',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.bold
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   content: SizedBox(
-                    height: 200,
+                    height: 190,
                     child: Column(
                       children: [
                         Container(
@@ -116,37 +133,67 @@ class _TaskPageState extends State<TaskPage> {
                           ),
                           width: double.infinity,
                           child: DropdownButton(
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.center,
+                            hint: Text('Seleccione un estado  '),
                             underline: SizedBox(),
                             value: initValue,
                             icon: Icon(Icons.rule_sharp),
                             items: status.map((s){
                               return DropdownMenuItem(
-                                value: s,
+                                value: s.statusId,
                                 child: Text(s.name),
                               );
                             }).toList(),
                             onChanged: (value){
-                              initValue = value;
+                              initValue = int.parse(value.toString());
                               setStateDialog(() {
                               });
                             },
                           ),
                         ),
                         CustomInput(
-                          icon: Icons.mail_outline,
-                          placeholder: 'Días',
+                          icon: Icons.hourglass_top_sharp,
+                          placeholder: 'Horas',
                           textInputType: TextInputType.number,
-                          textEditingController: TextEditingController(),
+                          textEditingController: taskEditingController,
                         )
                       ],
                     ),
                   ),
                   actions: [
                     MaterialButton(
-                      child: Text('Ok'),
-                      elevation: 5,
-                      textColor: Colors.blue,
+                      elevation: 2,
+                      textColor: AppColors.text100,
+                      color: AppColors.secondary,
+                      onPressed: (){
+                        var body = {
+                          "hours_worked": taskEditingController.text,
+                          "status_id": initValue,
+                          "task_id": tasks[i].taskId
+                        };
+                        tasks[i] = Task(
+                          taskId: tasks[i].taskId,
+                          title: tasks[i].title,
+                          description: tasks[i].description,
+                          initDate: tasks[i].initDate,
+                          hoursWorked: int.parse(taskEditingController.text),
+                          estimatedHours: tasks[i].estimatedHours,
+                          status: initValue.toString(),
+                          taskType: tasks[i].taskType
+                        );
+                        setState(() {});
+                        projectService.updateTask(body);
+                        Navigator.pop(context);
+                      },
+                      child: Text('Guardar'),
+                    ),
+                    MaterialButton(
+                      elevation: 2,
+                      textColor: AppColors.secondary,
+                      color: AppColors.primary,
                       onPressed: ()=> Navigator.pop(context),
+                      child: Text('Cancelar'),
                     )
                   ],
                 ),
@@ -165,7 +212,7 @@ class _TaskPageState extends State<TaskPage> {
                     style: TextStyle(
                       color: AppColors.secondary,
                       fontSize: 20,
-                      fontWeight: FontWeight.w500
+                      fontWeight: FontWeight.w600
                     )
                   ),
                   Icon(
@@ -179,13 +226,38 @@ class _TaskPageState extends State<TaskPage> {
                 height: 1,
                 color: AppColors.darkBackgroundColor,
               ),
-              Text(
-                tasks[i].description,
-                style: TextStyle(
-                color: AppColors.darkBackgroundColor,
-                fontSize: 16,
-                ),
-                textAlign: TextAlign.start,
+              Row(
+                children: [
+                  Container(
+                    width: mediaQuery.width * 0.65,
+                    child: Text(
+                      tasks[i].description,
+                      style: TextStyle(
+                        color: AppColors.darkBackgroundColor,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Text(
+                    '${tasks[i].hoursWorked}h / ',
+                    style: TextStyle(
+                      color: AppColors.darkBackgroundColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  Text(
+                    '${tasks[i].estimatedHours}h',
+                    style: TextStyle(
+                      color: AppColors.darkBackgroundColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
+                    textAlign: TextAlign.start,
+                  )
+                ],
               )
             ],
           ),

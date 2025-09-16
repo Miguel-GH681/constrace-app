@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chat_app/global/environment.dart';
@@ -121,7 +122,7 @@ class ProjectService{
           'Content-Type': 'application/json',
           'x-token': await AuthService.getToken()
         },
-      body: body
+      body: jsonEncode(body)
     );
     if( res.statusCode == 200 ){
       return true;
