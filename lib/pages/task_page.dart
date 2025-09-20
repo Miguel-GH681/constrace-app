@@ -155,6 +155,7 @@ class _TaskPageState extends State<TaskPage> {
                         CustomInput(
                           icon: Icons.hourglass_top_sharp,
                           placeholder: 'Horas',
+                          labelText: 'Horas trabajadas',
                           textInputType: TextInputType.number,
                           textEditingController: taskEditingController,
                         )

@@ -85,7 +85,10 @@ class _ProjectPageState extends State<ProjectPage> {
             children: [
               Positioned(
                 top: 30,
-                child: Image(image: AssetImage('assets/flag.png')),
+                child: Image.asset(
+                  'assets/flag.png',
+                  width: mediaQuery.width * 0.6,
+                ),
               ),
               Positioned(
                 bottom: 30,

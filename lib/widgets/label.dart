@@ -21,7 +21,7 @@ class Label extends StatelessWidget {
         SizedBox(height: 10,),
         GestureDetector(
           onTap: (){
-            Navigator.pushReplacementNamed(context, route);
+            // Navigator.pushReplacementNamed(context, route);
           },
           child: Text(
             subtitle,

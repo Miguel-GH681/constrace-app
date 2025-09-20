@@ -1,5 +1,7 @@
+import 'package:chat_app/pages/login_page.dart';
 import 'package:chat_app/pages/project_page.dart';
 import 'package:chat_app/pages/users_page.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/navbar_service.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class CorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navbarService = Provider.of<NavbarService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -33,9 +36,21 @@ class CorePage extends StatelessWidget {
           shadowColor: AppColors.darkBackgroundColor,
           backgroundColor: AppColors.secondary,
           actions: [
-            Container(
-              margin: EdgeInsets.only(right: 15),
-              child: Icon(Icons.offline_bolt, color: AppColors.tertiary),
+            GestureDetector(
+              onTap: (){
+                authService.logout();
+                Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                        pageBuilder: (_,__,___) => LoginPage(),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero
+                    )
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 15),
+                child: Icon(Icons.offline_bolt, color: AppColors.tertiary),
+              ),
             )
           ],
         ),

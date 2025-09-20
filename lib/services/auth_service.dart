@@ -21,7 +21,7 @@ class AuthService with ChangeNotifier{
       'password': password
     };
 
-    final uri = Uri.http(Environment.apiUrl, '/api/login');
+    final uri = Uri.https(Environment.apiUrl, '/api/login');
     final res = await http.post(
       uri,
       body: jsonEncode(data),
@@ -51,7 +51,7 @@ class AuthService with ChangeNotifier{
       'password': password
     };
 
-    final uri = Uri.http(Environment.apiUrl, '/api/login/new');
+    final uri = Uri.https(Environment.apiUrl, '/api/login/new');
     final res = await http.post(
         uri,
         body: jsonEncode(data),
@@ -97,10 +97,14 @@ class AuthService with ChangeNotifier{
     await _storage.delete(key: 'token');
   }
 
+  Future logout() async{
+    await _storage.delete(key: 'token');
+  }
+
   Future<bool> isLoggedIn() async{
     final token = await _storage.read(key: 'token') ?? '';
 
-    final uri = Uri.http(Environment.apiUrl, '/api/login/renew');
+    final uri = Uri.https(Environment.apiUrl, '/api/login/renew');
     final res = await http.get(uri,
       headers: {
         'Content-Type': 'application/json',
